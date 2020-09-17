@@ -1,0 +1,30 @@
+#!/usr/bin/env bash
+set -e
+
+file_basedir="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null 2>&1 && pwd )"
+project_basedir="$(dirname "${file_basedir}")"
+
+# clean all python and pytest cache files
+cd ${project_basedir}
+find . -name "*.pyc" -type f -delete
+find . -name "__pycache__" -type d -delete
+rm -rf .pytest_cache
+
+# Initialize virtualenv environment:
+if [[ ! -d "${project_basedir}/abhishek_test/venv" ]]; then
+    virtualenv -p python3 ${project_basedir}/sso_login_test/venv
+fi
+
+# Activate virtualenv environment:
+source ${project_basedir}/sso_login_test/venv/bin/activate
+
+# Install python packages:
+cd ${project_basedir}/sso_login_test
+pip3 install pip --upgrade
+pip3 install -r requirements.txt
+
+# Run test_suite:
+pytest -sv tests
+
+# Deactivate virtualenv:
+deactivate
