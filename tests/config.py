@@ -4,3 +4,5 @@ USER_DETAILS = {
     "email": "acase@ajubalaw.com",
     "password": "password",
 }
+
+HEADLESS = True
